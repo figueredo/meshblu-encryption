@@ -1,6 +1,6 @@
 {
   "name": "meshblu-encryption",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common encryption functions and patterns for Meshblu",
   "main": "index.js",
   "dependencies": {
