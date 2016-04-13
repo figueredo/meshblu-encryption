@@ -27,7 +27,7 @@ runToCommand = (toCommand, encryption) ->
 fromCommands = getFromCommands()
 toCommands   =  getToCommands()
 
-[..., from, to, file] = _.clone process.argv
+[..., from, to, file] = process.argv
 
 return console.log "must be from", fromCommands unless from in fromCommands
 return console.log "must be to", toCommands unless to in toCommands
