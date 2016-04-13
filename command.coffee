@@ -3,19 +3,18 @@ dashdash = require 'dashdash'
 Encryption = require '.'
 fs = require 'fs'
 
-getFromCommands = ->
-  _.chain(Encryption)
+getCommands = (thing, prefix) ->
+  _.chain(thing)
     .keys()
-    .filter (key) => _.startsWith key, 'from'
-    .map (command) => _.kebabCase _.trimLeft command, 'from'
+    .filter (key) => _.startsWith key, prefix
+    .map (command) => _.kebabCase _.trimLeft command, prefix
     .value()
 
+getFromCommands = ->
+  getCommands Encryption, 'from'
+
 getToCommands = ->
-  _.chain(Encryption.prototype)
-    .keys()
-    .filter (key) => _.startsWith key, 'to'
-    .map (command) => _.kebabCase _.trimLeft command, 'to'
-    .value()
+  getCommands Encryption.prototype, 'to'
 
 getEncryptionFromCommand = (fromCommand, value) ->
   fromFunction = "from#{_.capitalize _.camelCase fromCommand}"

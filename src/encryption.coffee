@@ -11,8 +11,18 @@ class Encryption
   toDer: =>
     @key.exportKey('private-der').toString 'base64'
 
+  toPublicEnvironmentValue: =>
+    @toPublicDer()
+
+  toPublicDer: =>
+    @key.exportKey('public-der').toString 'base64'
+
   toOldEnvironmentValue: =>
     pem = @key.exportKey()
+    new Buffer(pem).toString 'base64'
+
+  toPublicOldEnvironmentValue: =>
+    pem = @key.exportKey 'public'
     new Buffer(pem).toString 'base64'
 
   toPem: () =>
@@ -66,7 +76,7 @@ class Encryption
     Encryption.fromPem pem
 
   @fromEnvironmentValue: (env) =>
-    Encryption.fromDer der
+    Encryption.fromDer env
 
   @fromJustGuess: (thing) =>
     return new Encryption nodeRsa: thing if thing instanceof NodeRSA
@@ -75,10 +85,12 @@ class Encryption
     @fromDer thing
 
   @isPem: (thing) =>
-    _.startsWith thing, '-----' && _.endsWith thing, '-----'
+    thing = _.trim thing
+    _.startsWith(thing, '-----') && _.endsWith(thing, '-----')
 
   @isOldEnvironmentValue: (thing) =>
+    thing = _.trim thing
     decoded = new Buffer(thing, 'base64').toString()
-    @isPem thing
+    @isPem decoded
 
 module.exports = Encryption
