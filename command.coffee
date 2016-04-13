@@ -20,4 +20,8 @@ getToCommands = ->
 console.log dashdash
 console.log getFromCommands()
 console.log getToCommands()
-console.log process.argv
+args = _.clone process.argv
+value = args.pop()
+to = args.pop()
+from = args.pop()
+console.log {value, from, to}
