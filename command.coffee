@@ -1,4 +1,5 @@
 _ = require 'lodash'
+dashdash = require 'dashdash'
 Encryption = require '.'
 
 getFromCommands = ->
@@ -16,6 +17,7 @@ getToCommands = ->
     .value()
 
 
+console.log dashdash
 console.log getFromCommands()
 console.log getToCommands()
 console.log process.argv
