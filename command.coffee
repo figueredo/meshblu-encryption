@@ -18,3 +18,4 @@ getToCommands = ->
 
 console.log getFromCommands()
 console.log getToCommands()
+console.log process.argv
