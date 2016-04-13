@@ -67,8 +67,8 @@ class Encryption
 
   @fromJustGuess: (thing) =>
     return new Encryption nodeRsa: thing if thing instanceof NodeRSA
-    return Encryption.fromPem if Encryption.isPem thing
-    return Encryption.fromOldEnvironmentValue if Encryption.isOldEnvironmentValue thing
+    return Encryption.fromPem thing if Encryption.isPem thing
+    return Encryption.fromOldEnvironmentValue thing if Encryption.isOldEnvironmentValue thing
     @fromDer thing
 
   @isPem: (thing) =>
