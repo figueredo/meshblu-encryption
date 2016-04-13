@@ -2,24 +2,20 @@ NodeRSA = require 'node-rsa'
 _       = require 'lodash'
 
 class Encryption
-  constructor: ({privateKey}) ->
-    throw new Error('Private key not found!') unless privateKey?
-    @key = @createNodeRSA privateKey
+  constructor: ({nodeRsa}) ->
+    @key = nodeRsa
 
-  createNodeRSA: (keyString) =>
-    return new NodeRSA keyString  if _.startsWith keyString, '-----'
-
-    keyBinary = new Buffer keyString, 'base64'
-    return new NodeRSA keyBinary, 'pkcs1-der'
-
-  getPrivateKeyEnvironmentValue: =>
+  toEnvironmentValue: =>
     @key.exportKey('private-der').toString 'base64'
 
-  getOldPrivateKeyEnvironmentValue: =>
+  toOldEnvironmentValue: =>
     pem = @key.exportKey
     new Buffer(pem).toString 'base64'
 
-  getPublicKey: () =>
+  toPem: () =>
+    @key.exportKey()
+
+  toPublicKeyPem: () =>
     @key.exportKey 'public'
 
   authToCode: ({uuid, token}) =>
@@ -52,5 +48,34 @@ class Encryption
     signatureBuffer = new Buffer signature, 'base64'
 
     @key.verify optionsBuffer, signatureBuffer
+
+  @fromPem: (pem) =>
+    nodeRsa = new NodeRSA pem
+    encryption = new Encryption {nodeRsa}
+
+  @fromDer: (der) =>
+    keyBinary = new Buffer der, 'base64'
+    nodeRsa = new NodeRSA keyBinary, 'pkcs1-der'
+    encryption = new Encryption {nodeRsa}
+
+  @fromOldEnvironmentValue: (oldEnv) =>
+    pem = new Buffer(oldEnv, 'base64').toString()
+    Encryption.fromPem pem
+
+  @fromEnvironmentValue: (env) =>
+    Encryption.fromDer der
+
+  @fromJustGuess: (thing) =>
+    return new Encryption nodeRsa: thing if thing instanceof NodeRSA
+    return Encryption.fromPem if Encryption.isPem thing
+    return Encryption.fromOldEnvironmentValue if Encryption.isOldEnvironmentValue thing
+    @fromDer thing
+
+  @isPem: (thing) =>
+    _.startsWith thing, '-----' && _.endsWith thing, '-----'
+
+  @isOldEnvironmentValue: (thing) =>
+    decoded = new Buffer(thing, 'base64').toString()
+    @isPem thing
 
 module.exports = Encryption
