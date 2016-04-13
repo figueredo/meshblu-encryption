@@ -6,16 +6,19 @@ class Encryption
     @key = nodeRsa
 
   toEnvironmentValue: =>
+    @toDer()
+
+  toDer: =>
     @key.exportKey('private-der').toString 'base64'
 
   toOldEnvironmentValue: =>
-    pem = @key.exportKey
+    pem = @key.exportKey()
     new Buffer(pem).toString 'base64'
 
   toPem: () =>
     @key.exportKey()
 
-  toPublicKeyPem: () =>
+  toPublicPem: () =>
     @key.exportKey 'public'
 
   authToCode: ({uuid, token}) =>

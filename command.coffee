@@ -1,6 +1,7 @@
 _ = require 'lodash'
 dashdash = require 'dashdash'
 Encryption = require '.'
+fs = require 'fs'
 
 getFromCommands = ->
   _.chain(Encryption)
@@ -16,12 +17,23 @@ getToCommands = ->
     .map (command) => _.kebabCase _.trimLeft command, 'to'
     .value()
 
+getEncryptionFromCommand = (fromCommand, value) ->
+  fromFunction = "from#{_.capitalize _.camelCase fromCommand}"
+  Encryption[fromFunction] value
 
-console.log dashdash
-console.log getFromCommands()
-console.log getToCommands()
-args = _.clone process.argv
-value = args.pop()
-to = args.pop()
-from = args.pop()
-console.log {value, from, to}
+runToCommand = (toCommand, encryption) ->
+  toFunction = "to#{_.capitalize _.camelCase toCommand}"
+  encryption[toFunction]()
+
+fromCommands = getFromCommands()
+toCommands   =  getToCommands()
+
+[..., from, to, file] = _.clone process.argv
+
+return console.log "must be from", fromCommands unless from in fromCommands
+return console.log "must be to", toCommands unless to in toCommands
+value = fs.readFileSync file, 'utf8'
+
+encryption = getEncryptionFromCommand from, value
+result = runToCommand to, encryption
+console.log result
