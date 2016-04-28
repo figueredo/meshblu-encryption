@@ -46,21 +46,21 @@ class Encryption
 
     return {uuid, token, verified}
 
-  encryptOptions: (options) =>
+  encrypt: (options) =>
     @key.encrypt(JSON.stringify options).toString 'base64'
 
-  decryptOptions: (options) =>
+  decrypt: (options) =>
     decryptedOptions = JSON.parse @key.decrypt(options)
 
   sign: (options) =>
-    optionsBuffer = new Buffer(options)
-    @key.sign optionsBuffer
+    optionsString = JSON.stringify(options)
+    @key.sign(optionsString).toString 'base64'
 
   verify: (options, signature) =>
-    optionsBuffer = new Buffer options
+    optionsString = JSON.stringify options
     signatureBuffer = new Buffer signature, 'base64'
 
-    @key.verify optionsBuffer, signatureBuffer
+    @key.verify optionsString, signatureBuffer
 
   @fromPem: (pem) =>
     nodeRsa = new NodeRSA pem
