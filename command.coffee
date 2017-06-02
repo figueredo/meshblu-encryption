@@ -1,5 +1,4 @@
 _ = require 'lodash'
-dashdash = require 'dashdash'
 Encryption = require '.'
 fs = require 'fs'
 
