@@ -1,1 +1,1 @@
-module.exports=require('./src/encryption');
+module.exports=require('./encryption');
