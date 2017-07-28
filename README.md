@@ -62,12 +62,9 @@ Will decrypt the given data and return the unencrypted value, expects stringifie
 | Parameter | Type   | Required| Description                          |
 | ----------| -------| --------| -------------------------------------|
 | data      |string  | yes     | the string to decrypt |
-| callback  |function| yes     | a function that returns error and response |
 ------------------------------------------
 ```javascript
-meshbluEncryption.decrypt(data, function(error, response) {
-  // code goes here
-})
+var decryptedData = meshbluEncryption.decrypt('encrypted-string')
 ```
 
 ### encrypt
@@ -76,12 +73,9 @@ Will convert the given data to a JSON string, encrypt, and return a base64 encod
 | Parameter | Type   | Required| Description                          |
 | ----------| -------| --------| -------------------------------------|
 | data      |string  | yes     | the string to encrypt |
-| callback  |function| yes     | a function that returns error and response |
 ------------------------------------------
 ```javascript
-meshbluEncryption.encrypt(data, function(error, response) {
-  // code goes here
-})
+var encryptedData = meshbluEncryption.encrypt('string')
 ```
 
 ### sign
@@ -90,12 +84,9 @@ Will convert the given data to a JSON string, and return a signature for that da
 | Parameter | Type   | Required| Description                          |
 | ----------| -------| --------| -------------------------------------|
 | data      |string  | yes     | the string to sign |
-| callback  |function| yes     | a function that returns error and response |
 ------------------------------------------
 ```javascript
-meshbluEncryption.sign(data, function(error, signature) {
-  // code goes here
-})
+var signature = meshbluEncryption.sign('string')
 ```
 
 ### verify
@@ -105,10 +96,7 @@ Will verify a signature for the given data
 | ----------| -------| --------| -------------------------------------|
 | data      |string  | yes     | the string to verify |
 | signature |string  | yes     | the signature to verify |
-| callback  |function| yes     | a function that returns error and response |
 ------------------------------------------
 ```javascript
-meshbluEncryption.verify(data, signature, function(error, isValid) {
-  // code goes here
-})
+var isValid = meshbluEncryption.verify('encrypted-string', 'signature')
 ```
